@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+    }
+    .container {
+      display: flex;
+      width: 100%;
+    }
+    .form-section {
+      flex: 1;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+    }
+    .form-section h2 {
+      margin-bottom: 10px;
+    }
+    .form-section input, .form-section textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      font-size: 14px;
+    }
+    .form-section button {
+      background: blue;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .tasks-section {
+      flex: 2;
+      padding: 20px;
+    }
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f5f5f5;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .task-details {
+      flex: 1;
+    }
+    .task h3 {
+      margin: 0;
+    }
+    .task p {
+      margin: 5px 0 0;
+    }
+    .task button {
+      background: #5eff00;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left: Form -->
+    <div class="form-section">
+      <h2>Add a Task</h2>
+      <input type="text" id="title" placeholder="Title" required />
+      <textarea id="description" placeholder="Description"></textarea>
+      <button onclick="addTask()">Add</button>
+    </div>
+
+    <!-- Right: Task List -->
+    <div class="tasks-section">
+      <h2>Tasks</h2>
+      <div id="taskList"></div>
+    </div>
+  </div>
+
+  <script>
+  const API_URL = "http://localhost:8080";
+
+  // Fetch all tasks
+  async function loadTasks() {
+    const response = await fetch(`${API_URL}/task`);
+    const tasks = await response.json();
+    const taskList = document.getElementById("taskList");
+    taskList.innerHTML = "";
+
+    tasks.forEach(task => {
+      const taskDiv = document.createElement("div");
+      taskDiv.className = "task";
+
+      taskDiv.innerHTML = `
+        <div class="task-details">
+          <h3>${task.title}</h3>
+          <p>${task.description}</p>
+        </div>
+        <button onclick="markDone(${task.taskId})">Done</button>
+      `;
+      taskList.appendChild(taskDiv);
+    });
+  }
+
+  // ✅ Add new task with validation
+  async function addTask() {
+    const titleField = document.getElementById("title");
+    const descriptionField = document.getElementById("description");
+
+    const title = titleField.value.trim();
+    const description = descriptionField.value.trim();
+
+    // Validation with red borders
+    if (!title) {
+      titleField.style.border = "2px solid red";
+    } else {
+      titleField.style.border = "";
+    }
+
+    if (!description) {
+      descriptionField.style.border = "2px solid red";
+    } else {
+      descriptionField.style.border = "";
+    }
+
+    if (!title || !description) {
+      return; // stop if validation fails
+    }
+
+    // If valid, send request
+    await fetch(`${API_URL}/task`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, description })
+    });
+
+    // Reset form
+    titleField.value = "";
+    descriptionField.value = "";
+    titleField.style.border = "";
+    descriptionField.style.border = "";
+
+    loadTasks();
+  }
+
+  // Mark task as done
+  async function markDone(id) {
+    await fetch(`${API_URL}/task/${id}`, {
+      method: "PUT"
+    });
+    loadTasks();
+  }
+
+  // Load tasks when page loads
+  window.onload = loadTasks;
+</script>
+</body>
+</html>
