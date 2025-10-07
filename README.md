@@ -27,7 +27,7 @@ Before running this project, make sure you have installed:
 ```
 CoveragexTaskApp/
 │
-├── backend/          # Spring Boot source code (src + pom.xml)
+├── src/              # Spring Boot source code
 ├── frontend/         # SPA frontend files (index.html, assets)
 ├── db/               # Optional init.sql (currently empty)
 ├── Dockerfile        # Multi-stage Dockerfile for Spring Boot
@@ -43,7 +43,7 @@ CoveragexTaskApp/
 ### **1. Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/CoveragexTaskApp.git
+git clone https://github.com/yourusername/CoveragexTaskApp.git](https://github.com/gaddganepola/Coveragex-Task-App.git
 cd CoveragexTaskApp
 ```
 
