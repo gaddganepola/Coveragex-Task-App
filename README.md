@@ -18,7 +18,6 @@ Before running this project, make sure you have installed:
 * [Docker Compose](https://docs.docker.com/compose/install/)
 * (Optional) MySQL client if you want to connect directly
 
-> **Note:** On Windows, avoid folder paths with spaces (e.g., rename `CoveragexTaskApp - Copy` to `CoveragexTaskApp_Copy`) to prevent Docker volume mount issues.
 
 ---
 
@@ -28,7 +27,7 @@ Before running this project, make sure you have installed:
 CoveragexTaskApp/
 │
 ├── src/              # Spring Boot source code
-├── frontend/         # SPA frontend files (index.html, assets)
+├── frontend/         # SPA frontend files (index.html)
 ├── db/               # Optional init.sql (currently empty)
 ├── Dockerfile        # Multi-stage Dockerfile for Spring Boot
 ├── docker-compose.yml
@@ -44,6 +43,9 @@ CoveragexTaskApp/
 
 ```bash
 git clone https://github.com/yourusername/CoveragexTaskApp.git](https://github.com/gaddganepola/Coveragex-Task-App.git
+```
+
+```bash
 cd CoveragexTaskApp
 ```
 
